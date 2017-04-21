@@ -1,6 +1,5 @@
 # https://www.alphagrader.com/courses/6/assignments/17
 import fileinput
-import numpy as np
 
 initial_w = 0.1
 learning_rate = 0.03
@@ -17,9 +16,9 @@ def read_input():
         if step == 2:
             m = int(line)
         if step >= 4 and step < 4+m:
-            data_set.append(np.array([float(x) for x in line.split(',')], dtype=float))
+            data_set.append([float(x) for x in line.split(',')])
         if step >= 4+m:
-            test_set.append(np.array([float(x) for x in line.split(',')], dtype=float))
+            test_set.append([float(x) for x in line.split(',')])
         step += 1
     return data_set, test_set
 
@@ -27,7 +26,7 @@ def split_data(data):
     ds = []
     ls = []
     for d in data:
-        ds.append(np.append(d[:-1],1)) # BIAS CONSTANT
+        ds.append(d[:-1] + [1]) # BIAS CONSTANT
         ls.append(d[-1])
     return ds, ls
 
@@ -36,20 +35,26 @@ def step_activation(output):
         return 1.0
     return 0.0
 
+def dot(u,v):
+    return sum([x[0] * x[1] for x in zip(u,v)])
+
 def main():
     data, test = read_input()
     data, labels = split_data(data)
-    W = np.array([initial_w] * len(data[0]),dtype=float)
+    W = [initial_w] * len(data[0])
     n_iterations = 10
     for iteration in range(n_iterations):
         for row, label in zip(data, labels):
-            output = np.dot(W,row)
+            output = dot(W,row)
+            print(output)
             activation = step_activation(output)
-            update = learning_rate * (label - activation) * row
-            W += update
+            err = learning_rate * (label - activation)
+            update =  sum([err * r for r in row])
+            W = [ w+update for w in W]
+            # print(W)
     for row in test:
-        x = np.dot(W,np.append(row,1))
+        x = dot(W,row + [1])
         print(step_activation(x))
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     main()
