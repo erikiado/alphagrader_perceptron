@@ -42,19 +42,19 @@ def main():
     data, test = read_input()
     data, labels = split_data(data)
     W = [initial_w] * len(data[0])
-    n_iterations = 10
+    n_iterations = 5
     for iteration in range(n_iterations):
         for row, label in zip(data, labels):
             output = dot(W,row)
-            print(output)
             activation = step_activation(output)
             err = learning_rate * (label - activation)
-            update =  sum([err * r for r in row])
-            W = [ w+update for w in W]
-            # print(W)
-    for row in test:
-        x = dot(W,row + [1])
-        print(step_activation(x))
-
-if _name_ == '_main_':
+            update = [err * r for r in row]
+            W = [ w+update[i] for i,w in enumerate(W)]
+    if len(test) > 0:
+        for row in test:
+            x = dot(W,row + [1])
+            print(step_activation(x))
+    else:
+        print('no solution found')
+if __name__ == '__main__':
     main()
