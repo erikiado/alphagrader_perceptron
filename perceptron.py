@@ -53,7 +53,7 @@ def main():
     if len(test) > 0:
         for row in test:
             x = dot(W,row + [1])
-            print(step_activation(x))
+            print(int(step_activation(x)))
     else:
         print('no solution found')
 if __name__ == '__main__':
