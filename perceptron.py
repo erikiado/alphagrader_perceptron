@@ -51,9 +51,9 @@ def main():
             activation = step_activation(output)
             err = learning_rate * (label - activation)
             update = [err * r for r in row]
-            print (W)
+            #print (W)
             W = [ w+update[i] for i,w in enumerate(W)]
-        print
+        #print
     if len(test) > 0:
         for row in test:
             x = dot(W,row + [1])
