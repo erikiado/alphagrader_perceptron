@@ -1,7 +1,8 @@
 # https://www.alphagrader.com/courses/6/assignments/17
 import fileinput
-
+#startin weight value
 initial_w = 0.1
+#how fast this advance
 learning_rate = 0.03
 
 def read_input():
@@ -42,6 +43,7 @@ def main():
     data, test = read_input()
     data, labels = split_data(data)
     W = [initial_w] * len(data[0])
+#how many times it will learn
     n_iterations = 5
     for iteration in range(n_iterations):
         for row, label in zip(data, labels):
@@ -49,7 +51,9 @@ def main():
             activation = step_activation(output)
             err = learning_rate * (label - activation)
             update = [err * r for r in row]
+            print (W)
             W = [ w+update[i] for i,w in enumerate(W)]
+        print
     if len(test) > 0:
         for row in test:
             x = dot(W,row + [1])
